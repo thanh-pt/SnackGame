@@ -13,6 +13,11 @@ public class Point {
         y = newY;
     }
 
+    public void Copy(Point point){
+        x = point.getX();
+        y = point.getY();
+    }
+
     public int getX() {
         return x;
     }

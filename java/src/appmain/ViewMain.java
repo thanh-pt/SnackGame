@@ -1,44 +1,16 @@
 package appmain;
 
+import appmain.service.KeyService;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.Vector;
 
 public class ViewMain {
-    private JFrame          frmMain;
 
-    private Snack           snack;
-
-    class Keyhandler implements KeyListener {
-        SnakeHeader snakeHeader;
-
-        public Keyhandler(SnakeHeader snakeHeaderObj){
-            snakeHeader = snakeHeaderObj;
-        }
-
-        @Override
-        public void keyTyped(KeyEvent e) {
-
-        }
-
-        @Override
-        public void keyPressed(KeyEvent e) {
-            System.out.println(e);
-            if (e.getKeyCode() == KeyEvent.VK_U){
-                snakeHeader.setDirection(SnakeHeader.Direction.UP);
-                System.out.println("vao1");
-            }
-        }
-
-        @Override
-        public void keyReleased(KeyEvent e) {
-
-        }
-    }
+    private Snack snack;
 
     class DrawingPanel extends JPanel {
         private void doDrawing(Graphics g) {
@@ -48,11 +20,13 @@ public class ViewMain {
             g2d.setColor(Color.blue);
 
             Vector<Point> body = snack.getBody();
-            for (int i = 0; i < body.size(); ++i){
-                g2d.fillRect(body.get(i).getX(), body.get(i).getY(), 10, 10);
+            for (Point point : body) {
+//                g2d.fillRect(point.getX() * 10, point.getY() * 10, 10, 10);
+                g2d.drawRect(point.getX() * 10, point.getY() * 10, 10, 10);
             }
-            g2d.fillRect(snack.getHeader().getX(), snack.getHeader().getY(), 12,12);
-
+            g2d.setColor(Color.red);
+//            g2d.fillRect(snack.getHeader().getX()*10, snack.getHeader().getY()*10, 10,10);
+            g2d.drawRect(snack.getHeader().getX()*10, snack.getHeader().getY()*10, 10,10);
         }
 
         @Override
@@ -65,32 +39,39 @@ public class ViewMain {
     public ViewMain(){
         snack = new Snack();
 
-        frmMain = new JFrame();
-        frmMain.setTitle("Snack game");
+        // Init GUI component
+        JFrame          frmMain         = new JFrame();
+        DrawingPanel    drawingPanel    = new DrawingPanel();
+        KeyService      keyService      = new KeyService(this);
 
-        DrawingPanel drawingPanel = new DrawingPanel();
+        // Set component property
         drawingPanel.setBounds(0, 0, 320, 320);
 
+        // Add component to main Frame
         frmMain.add(drawingPanel);
 
+
+        // Setup main Frame
+        frmMain.setTitle("Snack game");
         frmMain.setSize(320,400);
         frmMain.setLayout(null);
         frmMain.setVisible(true);
         frmMain.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-        Keyhandler keyhandler = new Keyhandler(snack.getHeader());
-
-        frmMain.addKeyListener(keyhandler);
+        frmMain.addKeyListener(keyService);
         frmMain.setFocusable(true);
 
 
-        Timer timer = new Timer(1000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                snack.update();
-                drawingPanel.updateUI();
-            }
+        Timer timer = new Timer(200, e -> {
+            snack.update();
+            drawingPanel.updateUI();
         });
         timer.start();
+    }
+
+    public void ActionHandle(int keyCode){
+        SnakeHeader.Direction dir = Utility.KeyCode2Directory(keyCode);
+        if (dir != SnakeHeader.Direction.NON){
+            snack.getHeader().setDirection(dir);
+        }
     }
 }
