@@ -54,11 +54,11 @@ public class ViewMain {
         // Timer setup
         timer = new Timer(200, e -> {
             snack.update();
-            if (snack.getHeader().compare(fruit) == true){
+            if (snack.getHeader().compare(fruit)){
                 snack.growUp();
                 fruit.reset();
             }
-            if (wall.isContain(snack.getHeader()) == true){
+            if (wall.isContain(snack.getHeader())){
                 timer.stop();
             } else {
                 drawingPanel.updateUI();
@@ -75,6 +75,6 @@ public class ViewMain {
     }
 
     public static void main(String[] args) {
-        ViewMain appMain = new ViewMain();
+        new ViewMain();
     }
 }
