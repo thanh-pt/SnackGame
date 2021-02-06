@@ -1,24 +1,36 @@
 package appmain;
 
+import appmain.enum_def.Direction;
+
 import java.awt.event.KeyEvent;
 
 public class Utility {
-    static SnakeHeader.Direction KeyCode2Directory(int keyCode){
-        SnakeHeader.Direction dirResult = SnakeHeader.Direction.NON;
+    static Direction KeyCode2Directory(int keyCode){
+        Direction dirResult = Direction.NON;
         switch (keyCode){
             case KeyEvent.VK_UP:
-                dirResult = SnakeHeader.Direction.UP;
+                dirResult = Direction.UP;
                 break;
             case KeyEvent.VK_DOWN:
-                dirResult = SnakeHeader.Direction.DOWN;
+                dirResult = Direction.DOWN;
                 break;
             case KeyEvent.VK_LEFT:
-                dirResult = SnakeHeader.Direction.LEFT;
+                dirResult = Direction.LEFT;
                 break;
             case KeyEvent.VK_RIGHT:
-                dirResult = SnakeHeader.Direction.RIGHT;
+                dirResult = Direction.RIGHT;
                 break;
         }
         return dirResult;
+    }
+
+    static public int verifyPos(int pos, int min, int max){
+        if (pos > max){
+            return min;
+        }
+        if (pos < min){
+            return max;
+        }
+        return pos;
     }
 }
