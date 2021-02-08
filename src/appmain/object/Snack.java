@@ -1,6 +1,6 @@
 package appmain.object;
 
-import appmain.enum_def.Direction;
+import appmain.app_define.Direction;
 
 import java.util.Vector;
 

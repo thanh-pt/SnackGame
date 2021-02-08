@@ -1,4 +1,4 @@
-package appmain.enum_def;
+package appmain.app_define;
 
 public enum Direction {
     NON,

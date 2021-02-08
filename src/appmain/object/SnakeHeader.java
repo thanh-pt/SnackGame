@@ -1,7 +1,7 @@
 package appmain.object;
 
 import appmain.Utility;
-import appmain.enum_def.Direction;
+import appmain.app_define.Direction;
 
 public class SnakeHeader extends Point {
 

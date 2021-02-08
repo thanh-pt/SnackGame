@@ -1,14 +1,15 @@
 package appmain.service;
 
-import appmain.ViewMain;
-
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class KeyService implements KeyListener {
-    ViewMain view;
-    public KeyService(ViewMain newView){
-        view = newView;
+    IKeyServiceListener client = null;
+    public KeyService(){
+    }
+
+    public void setClient(IKeyServiceListener clientObj){
+        client = clientObj;
     }
 
     @Override
@@ -18,7 +19,9 @@ public class KeyService implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        view.ActionHandle(e.getKeyCode());
+        if (client != null){
+            client.ActionHandle(e.getKeyCode());
+        }
     }
 
     @Override

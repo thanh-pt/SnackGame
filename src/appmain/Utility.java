@@ -1,11 +1,11 @@
 package appmain;
 
-import appmain.enum_def.Direction;
+import appmain.app_define.Direction;
 
 import java.awt.event.KeyEvent;
 
 public class Utility {
-    static Direction KeyCode2Directory(int keyCode){
+    static public Direction KeyCode2Directory(int keyCode){
         Direction dirResult = Direction.NON;
         switch (keyCode){
             case KeyEvent.VK_UP:
