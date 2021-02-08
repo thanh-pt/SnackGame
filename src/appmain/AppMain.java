@@ -1,19 +1,18 @@
 package appmain;
 
 import appmain.app_define.PageEvent;
-import appmain.pages.IPageListener;
-import appmain.pages.MainPage;
-import appmain.pages.PlayGameSnakePage;
+import appmain.engine.SnakeGame;
+import appmain.pages.*;
 import appmain.service.KeyService;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class AppMain implements IPageListener {
     private JFrame frmMain;
     // Pages
     private MainPage mainPage;
-    private PlayGameSnakePage playGameSnakePage;
+    private PlayPage playPage;
+    private SnakeGame playGameSnakePage;
     // Service
     private KeyService keyService;
 
@@ -21,24 +20,23 @@ public class AppMain implements IPageListener {
         frmMain = new JFrame();
         frmMain.setTitle("Snack game");
         frmMain.setVisible(true);
-        frmMain.pack();
         frmMain.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         keyService = new KeyService();
         frmMain.addKeyListener(keyService);
 
         mainPage = new MainPage();
-        mainPage.setClient(this);
+        playPage = new PlayPage();
 
-        playGameSnakePage = new PlayGameSnakePage();
-        playGameSnakePage.setClient(this);
-
-        frmMain.getContentPane().add(mainPage.getPnlContent());
-        frmMain.setSize(400, 450);
+        frmMain.getContentPane().add(playPage.getContainer());
+        frmMain.getContentPane().add(mainPage.getContainer());
+        setPage(mainPage);
     }
 
-    public void setPage(Container container){
-        frmMain.setContentPane(container);
+    public void setPage(PageBase page){
+        frmMain.setContentPane(page.getContainer());
+        page.setClient(this);
+        frmMain.pack();
     }
 
     public static void main(String[] args) {
@@ -49,13 +47,13 @@ public class AppMain implements IPageListener {
     public void onPageEvent(PageEvent event) {
         switch (event){
             case START_NEW_GAME:
-                setPage(playGameSnakePage);
-                keyService.setClient(playGameSnakePage);
-                frmMain.setSize(400,450);
+                setPage(playPage);
+                playPage.startSnakeGame();
+                keyService.setClient(playPage.getKeyServiceListener());
                 frmMain.requestFocus();
                 break;
-            case EXIT_SNAKE_GAME:
-                setPage(mainPage.getPnlContent());
+            case BACK_TO_MAIN:
+                setPage(mainPage);
                 keyService.setClient(null);
                 break;
         }

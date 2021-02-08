@@ -1,4 +1,4 @@
-package appmain.pages;
+package appmain.engine;
 
 import appmain.Utility;
 import appmain.app_define.Direction;
@@ -16,28 +16,14 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.util.Vector;
 
-public class PlayGameSnakePage extends JPanel implements IKeyServiceListener, IPage {
+public class SnakeGame extends JPanel implements IKeyServiceListener {
     private Snack   snack;
     private Fruit   fruit;
     private Wall    wall;
     private Timer   timer = null;
     private int     pixelSize = 10;
-    private IPageListener client = null;
 
-    public PlayGameSnakePage (){
-        setSize(400,400);
-
-        // Snack initialize
-        snack = new Snack();
-        snack.getHeader().setPosition(10, 10);
-        snack.getHeader().setMaxPos(getMaxPixel(), getMaxPixel());
-
-        fruit = new Fruit();
-        fruit.setMaxPos(getMaxPixel(), getMaxPixel());
-        fruit.reset();
-
-        wall = new Wall();
-
+    public SnakeGame(){
         // Timer setup
         timer = new Timer(200, e -> {
             snack.update();
@@ -53,12 +39,24 @@ public class PlayGameSnakePage extends JPanel implements IKeyServiceListener, IP
         });
     }
 
+    public void initGame(){
+        // Snack initialize
+        snack = new Snack();
+        snack.getHeader().setPosition(10, 10);
+        snack.getHeader().setMaxPos(getParent().getWidth()/pixelSize, getParent().getHeight()/pixelSize);
+
+        fruit = new Fruit();
+        fruit.setMaxPos(getParent().getWidth()/pixelSize, getParent().getHeight()/pixelSize);
+        fruit.reset();
+
+        wall = new Wall();
+    }
+
     private void drawPoint(Graphics2D g2d, Point p){
         g2d.fillRect(p.getX() * pixelSize, p.getY() * pixelSize, pixelSize, pixelSize);
     }
 
     private void doDrawing(Graphics g) {
-
         var g2d = (Graphics2D) g;
         setBackground(Color.GRAY);
 
@@ -90,10 +88,6 @@ public class PlayGameSnakePage extends JPanel implements IKeyServiceListener, IP
         doDrawing(g);
     }
 
-    public int getMaxPixel() {
-        return getWidth() / pixelSize-1;
-    }
-
     @Override
     public void ActionHandle(int keyCode) {
         Direction dir = Utility.KeyCode2Directory(keyCode);
@@ -106,15 +100,6 @@ public class PlayGameSnakePage extends JPanel implements IKeyServiceListener, IP
             } else {
                 timer.start();
             }
-        } else if (keyCode == KeyEvent.VK_ESCAPE){
-            if (client != null){
-                client.onPageEvent(PageEvent.EXIT_SNAKE_GAME);
-            }
         }
-    }
-
-    @Override
-    public void setClient(IPageListener clientObj) {
-        client = clientObj;
     }
 }

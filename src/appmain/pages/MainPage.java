@@ -3,18 +3,17 @@ package appmain.pages;
 import appmain.app_define.PageEvent;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class MainPage implements IPage{
+public class MainPage extends PageBase {
     private JButton newGameButton;
     private JButton createChallengeButton;
     private JButton highScoreButton;
     private JButton controlButton;
     private JButton helpButton;
-    private JPanel pnlContent;
-
-    private IPageListener client = null;
+    private JPanel container;
 
     public MainPage() {
         newGameButton.addActionListener(new ActionListener() {
@@ -51,12 +50,8 @@ public class MainPage implements IPage{
         });
     }
 
-    public JPanel getPnlContent() {
-        return pnlContent;
-    }
-
     @Override
-    public void setClient(IPageListener clientObj) {
-        client = clientObj;
+    public Container getContainer() {
+        return container;
     }
 }
